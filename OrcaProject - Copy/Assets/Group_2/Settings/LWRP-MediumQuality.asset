@@ -27,7 +27,7 @@ MonoBehaviour:
   m_ShadowDistance: 1000
   m_ShadowCascades: 2
   m_Cascade2Split: 0.1
-  m_Cascade4Split: {x: 0.026098669, y: 0.23542234, z: 0.5623679}
+  m_Cascade4Split: {x: 0.0016165588, y: 0.23542233, z: 0.5623679}
   m_LocalShadowsSupported: 1
   m_LocalShadowsAtlasResolution: 4096
   m_SoftShadowsSupported: 1
