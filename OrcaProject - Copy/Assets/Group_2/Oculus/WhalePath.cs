@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using System.Diagnostics;
 
 public class WhalePath : MonoBehaviour {
 
@@ -116,16 +118,22 @@ public class WhalePath : MonoBehaviour {
         return ((whale.position - waypoints[target].position).magnitude < triggerDistance);
     }
 
-    public void moveToNext()
+    // This method will be called when:
+    //   1) end == true
+    //   2) the happy_clap animation reaches the end (called by event).
+    private void moveToNext()
     {
         celebrating = false;
         anim.SetBool("Celebrating", false);
         current = target;
       
-        if (target < waypoints.Count)
+        if (target < waypoints.Count - 1)
         {
             target++;
             anim.SetInteger("Target", target);
+        } else
+        {
+            anim.SetBool("DoSpyHopping", true);
         }
         //anim.SetInteger("Target", target);
         anim.SetBool("Swim", true);

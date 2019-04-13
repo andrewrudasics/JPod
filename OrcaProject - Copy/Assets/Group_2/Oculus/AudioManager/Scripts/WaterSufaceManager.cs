@@ -12,7 +12,7 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
     public PostProcessVolume abovewaterPostprocessing;
     public PostProcessVolume waterSurfacePostprocessing;
 
-    private float threshold = 0.2f;
+    private float threshold = 0.5f;
 
     public void Update()
     {
@@ -22,37 +22,21 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
         {
             isAboveWater = false;
         }
-        if (isNearSurface == false && Mathf.Abs(player.position.y - waterSurface.position.y) < threshold)
-        {
-            //StartCoroutine(StartTransition(1));
-        }
+        SetPostProcessingWeight();
     }
 
 
-    IEnumerator StartTransition(float duration)
+    private void SetPostProcessingWeight()
     {
         float percentage = 0;
         float initialWeightAbove = abovewaterPostprocessing.weight;
         float initialWeightUnder = underwaterPostprocessing.weight;
-        while (percentage < 1)
-        {
-            percentage += Time.deltaTime;
-            waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, percentage / duration);
-            underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, percentage / duration);
-            abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, percentage / duration);
-            yield return new WaitForEndOfFrame();
-        }
 
-        while (percentage > 0)
-        {
-            percentage -= Time.deltaTime;
-            waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, percentage / duration);
-            underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, percentage / duration);
-            abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, percentage / duration);
-            yield return new WaitForEndOfFrame();
-        }
-        yield return null;
-
+        percentage = 1 - Mathf.Abs(player.position.y - waterSurface.position.y) / threshold;
+        print(percentage);
+        waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, percentage);
+        underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, percentage);
+        abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, percentage);
     }
 
 }
