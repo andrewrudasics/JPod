@@ -24,7 +24,7 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
         }
         if (isNearSurface == false && Mathf.Abs(player.position.y - waterSurface.position.y) < threshold)
         {
-            StartCoroutine(StartTransition(1));
+            //StartCoroutine(StartTransition(1));
         }
     }
 
@@ -37,18 +37,18 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
         while (percentage < 1)
         {
             percentage += Time.deltaTime;
-            waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, time / duration);
-            underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, time / duration);
-            abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, time / duration);
+            waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, percentage / duration);
+            underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, percentage / duration);
+            abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, percentage / duration);
             yield return new WaitForEndOfFrame();
         }
 
         while (percentage > 0)
         {
             percentage -= Time.deltaTime;
-            waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, time / duration);
-            underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, time / duration);
-            abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, time / duration);
+            waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, percentage / duration);
+            underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, percentage / duration);
+            abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, percentage / duration);
             yield return new WaitForEndOfFrame();
         }
         yield return null;
