@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: kelp_unlit
-  m_Shader: {fileID: 4800000, guid: 8d24ee177157fbb4097f3cbac4d3914b, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5c7751de37b294144b6a88a813b0517a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -68,10 +68,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_155FA5AE: 5
-    - Vector1_177D4475: 0.144
+    - Vector1_177D4475: 0.377
+    - Vector1_222FC5F: 0.5
+    - Vector1_2A8A29F8: 0.05
+    - Vector1_74EEE9A0: 20
     - Vector1_7ADDD0C4: 4.5
     - Vector1_845BBE21: 2.06
+    - Vector1_9D4B8341: 5
     - Vector1_B19006A: 0.2
+    - Vector1_B733207C: 0.01
+    - Vector1_BDA3F216: 10
     - Vector1_F0ADC361: 0
     - Vector1_F4A3624A: 3
     - _AlphaClip: 0
@@ -95,7 +101,12 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_B773F8E8: {r: 1, g: 1, b: 1, a: 0}
     - Color_BB687BC8: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0}
+    - Vector2_1800F3E2: {r: 1, g: 1, b: 0, a: 0}
+    - Vector3_18F1ACA2: {r: -0.29, g: 1, b: 2.88, a: 0}
+    - Vector3_651DE642: {r: 0, g: 0, b: 0, a: 0}
+    - Vector3_6CA1A80: {r: -16.05, g: -73.69, b: -0.1, a: 0}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

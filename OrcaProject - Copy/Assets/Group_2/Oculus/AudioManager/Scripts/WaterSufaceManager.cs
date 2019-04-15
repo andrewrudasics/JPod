@@ -13,7 +13,14 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
     public PostProcessVolume waterSurfacePostprocessing;
 
     private float threshold = 0.5f;
+    private float initialWeightAbove;
+    private float initialWeightUnder;
 
+    public void Start()
+    {
+        initialWeightAbove = abovewaterPostprocessing.weight;
+        initialWeightUnder = underwaterPostprocessing.weight;
+}
     public void Update()
     {
         if (player.position.y > waterSurface.position.y) {
@@ -29,14 +36,15 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
     private void SetPostProcessingWeight()
     {
         float percentage = 0;
-        float initialWeightAbove = abovewaterPostprocessing.weight;
-        float initialWeightUnder = underwaterPostprocessing.weight;
+        
 
         percentage = 1 - Mathf.Abs(player.position.y - waterSurface.position.y) / threshold;
-        print(percentage);
+        percentage = Mathf.Max(percentage, 0);
+        percentage = Mathf.Min(percentage, 1);
         waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, percentage);
         underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, percentage);
         abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, percentage);
+        print("lerped percentage" + Mathf.Lerp(initialWeightAbove, 0, percentage));
     }
 
 }
