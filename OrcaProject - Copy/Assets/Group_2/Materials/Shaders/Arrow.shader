@@ -9,9 +9,11 @@ Shader "Unlit/Arrow"
 	}
 	SubShader
 	{
-		Tags { "Queue" = "Transparent" "RenderType" = "Transparent"}
+		Tags { "Queue" = "Overlay" "RenderType" = "Transparent"}
 		LOD 100
 		Blend SrcAlpha One
+		Ztest Always
+
 		Pass
 		{
 			CGPROGRAM
@@ -46,7 +48,7 @@ Shader "Unlit/Arrow"
 				v2f o;
 				float4 viewPos = mul(UNITY_MATRIX_V, float4(target.xyz, 1));
 				float4 dir = normalize(float4(viewPos.x, viewPos.y, 0, 0));
-				float4 center = min(1, length(viewPos.xy)) * dir;
+				float4 center = min(0.5, length(viewPos.xy)) * dir;
 				float angle = acos(dot(dir.xyz, float3(0, 1, 0))) * (dir.x / -abs(dir.x));
 				float4x4 rotation;
 				rotation[0] = float4(cos(angle), -sin(angle), 0, 0);

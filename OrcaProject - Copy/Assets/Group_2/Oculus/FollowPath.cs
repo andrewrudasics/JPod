@@ -14,18 +14,29 @@ public class FollowPath : MonoBehaviour
     public PostProcessVolume post;
 
     private int current, target;
-
+    private float initialVignette;
     // Start is called before the first frame update
     void Start()
     {
         current = 0;
         target = 1;
         Vignette v = ScriptableObject.CreateInstance<Vignette>();
+        Vignette VignetteLayer = null;
+        post.profile.TryGetSettings(out VignetteLayer);
+        initialVignette = VignetteLayer.intensity.value;
+        print("iv" + initialVignette);
     }
 
     // Update is called once per frame
     void Update()
     {
+        Vignette VignetteLayer = null;
+        post.profile.TryGetSettings(out VignetteLayer);
+        print(VignetteLayer);
+        float amount = Mathf.Abs(Input.GetAxis("Vertical"));
+        print(initialVignette + amount / 5);
+        VignetteLayer.intensity.value = initialVignette + amount / 8;
+
         /*if (target < 6)
         {
             var targetRotation = Quaternion.LookRotation(waypoints[target].position - transform.position);
@@ -35,6 +46,8 @@ public class FollowPath : MonoBehaviour
             var targetRotation = Quaternion.LookRotation(new Vector3(0,0,0));
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
         }*/
+
+
         if (target < 5)
         {
             if (!atTarget() && whale.GetComponent<WhalePath>().hasReached())
@@ -62,7 +75,7 @@ public class FollowPath : MonoBehaviour
             }
         } else
         {
-            Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick);//SecondaryThumbstick);
+            Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick); //SecondaryThumbstick);
             Debug.Log(xy);
             Vector3 move = Vector3.zero;
             if (Input.GetKey(KeyCode.UpArrow) || (Mathf.Sign(xy.y) > 0 && xy.y != 0.0f))

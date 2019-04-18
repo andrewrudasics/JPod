@@ -129,14 +129,15 @@ public class WhalePath : MonoBehaviour {
       
         if (target < waypoints.Count - 1)
         {
+            anim.SetBool("Swim", true);
             target++;
             anim.SetInteger("Target", target);
         } else
         {
+            anim.SetBool("Swim", false);
             anim.SetBool("DoSpyHopping", true);
         }
         //anim.SetInteger("Target", target);
-        anim.SetBool("Swim", true);
         anim.SetBool("Follow", false);
         player.GetComponent<FollowPath>().updateTarget();
     }
