@@ -18,7 +18,7 @@ public class FadeControl : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        mat = meshRenderer.material;
+    
         PostProcessVolume ppv = GetComponent<PostProcessVolume>();
 
         fadeIn();

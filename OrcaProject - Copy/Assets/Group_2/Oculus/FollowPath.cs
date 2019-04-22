@@ -13,7 +13,7 @@ public class FollowPath : MonoBehaviour
     public List<Transform> waypoints;
     public PostProcessVolume post;
 
-    private int current, target;
+    public int current, target;
     private float initialVignette;
     // Start is called before the first frame update
     void Start()

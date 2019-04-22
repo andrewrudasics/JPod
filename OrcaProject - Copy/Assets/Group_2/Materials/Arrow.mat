@@ -5,7 +5,8 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Arrow
   m_Shader: {fileID: 4800000, guid: 443050758012f864ba9bb82e7db41c71, type: 3}
   m_ShaderKeywords: 
@@ -84,4 +85,4 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TargetPosition: {r: 0, g: 0, b: 0, a: 0}
-    - target: {r: 11.785321, g: -39.45843, b: -23.383745, a: 0}
+    - target: {r: -20.827953, g: -72.84088, b: -14.314464, a: 0}
