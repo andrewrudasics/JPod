@@ -4,7 +4,8 @@ using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
 
-public class WhalePath : MonoBehaviour {
+public class WhalePath : MonoBehaviour
+{
 
     public Animator anim;
 
@@ -21,8 +22,12 @@ public class WhalePath : MonoBehaviour {
     public bool reached, prev, playerReached, prevR, celebrating, end, start;
     public float celebrationStart = 0.0f;
 
+    //temporyrary variable, used to remove turning(transform);
+    private bool flag = true;
+
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         current = 0;
         target = 1;
         reached = false;
@@ -35,16 +40,22 @@ public class WhalePath : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
         if (start)
         {
             end = target == 5 && atTarget();
             if (target < 6)
             {
-                var targetRotation = Quaternion.LookRotation(lookTarget.transform.position - transform.position);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
+                if (flag)
+                {
+                    var targetRotation = Quaternion.LookRotation(lookTarget.transform.position - transform.position);
+                    print(targetRotation);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
+                }
             }
+
             else
             {
                 triggerDistance = 0.05f;
@@ -61,6 +72,10 @@ public class WhalePath : MonoBehaviour {
 
             if (atTarget())
             {
+                if (reached == false)
+                {
+                    flag = false;
+                }
                 reached = true;
                 lookTarget = player;
                 if (reached != prev)
@@ -114,7 +129,8 @@ public class WhalePath : MonoBehaviour {
         }
     }
 
-    private bool atTarget() {
+    private bool atTarget()
+    {
         return ((whale.position - waypoints[target].position).magnitude < triggerDistance);
     }
 
@@ -126,13 +142,14 @@ public class WhalePath : MonoBehaviour {
         celebrating = false;
         anim.SetBool("Celebrating", false);
         current = target;
-      
+
         if (target < waypoints.Count - 1)
         {
             anim.SetBool("Swim", true);
             target++;
             anim.SetInteger("Target", target);
-        } else
+        }
+        else
         {
             anim.SetBool("Swim", false);
             anim.SetBool("DoSpyHopping", true);
@@ -150,5 +167,11 @@ public class WhalePath : MonoBehaviour {
     public void StartMoves()
     {
         start = true;
+    }
+
+    public void SetFlag(int i)
+    {
+        print("setting flat");
+        flag = true;
     }
 }
