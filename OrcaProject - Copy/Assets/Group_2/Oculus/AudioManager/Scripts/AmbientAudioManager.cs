@@ -49,7 +49,7 @@ public class AmbientAudioManager : MonoBehaviour {
 
         if (pod.active) {
             if (Time.time - podStart > playDuration && !fadeStarted) {
-                fade.fadeOut();
+                //fade.fadeOut();
                 fadeStarted = true;
             }
         }

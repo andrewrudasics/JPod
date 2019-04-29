@@ -47,22 +47,26 @@ public class FollowPath : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
         }*/
 
-
-        if (target < 5)
+        // used to be "if target < 5".
+        if (true)
         {
             if (!atTarget() && whale.GetComponent<WhalePath>().hasReached())
             {
                 Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick);//SecondaryThumbstick);
                 Debug.Log(xy);
                 Vector3 move = Vector3.zero;
-                if (Input.GetKey(KeyCode.UpArrow) || (Mathf.Sign(xy.y) > 0 && xy.y != 0.0f))
+
+                move += Input.GetAxis("Horizontal") * transform.right;
+                move += Input.GetAxis("Vertical") * transform.forward;
+
+                /*if (Input.GetKey(KeyCode.UpArrow) || (Mathf.Sign(xy.y) > 0 && xy.y != 0.0f))
                 {
                     move = waypoints[target].position - player.position;
                 }
                 else if (Input.GetKey(KeyCode.DownArrow) || (Mathf.Sign(xy.y) < 0 && xy.y != 0.0f))
                 {
                     move = waypoints[current].position - player.position;
-                }
+                } */
                /* if (move.magnitude > 0) {
                     
                     v.enabled.Override(true);
@@ -89,14 +93,14 @@ public class FollowPath : MonoBehaviour
             player.position += move.normalized * playerSpeed * Time.deltaTime;
         }
 
-        if (atTarget() && target == 5)
+        if (atTarget() && target == 6)
         {
             updateTarget();
         }
         
     }
 
-    private bool atTarget() {
+    public bool atTarget() {
         return ((player.position - waypoints[target].position).magnitude < triggerDistance);
     }
 
