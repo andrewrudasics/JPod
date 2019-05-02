@@ -55,7 +55,6 @@ public class SplineWalker : MonoBehaviour
             }
             
         }
-        print(dt);
         return dt;
     }
 }

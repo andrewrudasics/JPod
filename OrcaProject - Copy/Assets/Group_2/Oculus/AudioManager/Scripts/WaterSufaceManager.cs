@@ -44,7 +44,6 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
         waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, percentage);
         underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, percentage);
         abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, percentage);
-        print("lerped percentage" + Mathf.Lerp(initialWeightAbove, 0, percentage));
     }
 
 }

@@ -32,7 +32,6 @@ public class FollowPath : MonoBehaviour
     {
         Vignette VignetteLayer = null;
         post.profile.TryGetSettings(out VignetteLayer);
-        print(VignetteLayer);
         float amount = Mathf.Max(0, Input.GetAxis("Vertical"));
         print(initialVignette + amount / 5);
         VignetteLayer.intensity.value = initialVignette + amount / 8;

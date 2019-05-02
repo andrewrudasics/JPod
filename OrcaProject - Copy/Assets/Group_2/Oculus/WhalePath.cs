@@ -52,7 +52,6 @@ public class WhalePath : MonoBehaviour
                 if (flag)
                 {
                     var targetRotation = Quaternion.LookRotation(lookTarget.transform.position - transform.position);
-                    print(targetRotation);
                     transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
                 }
             }
