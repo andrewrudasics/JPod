@@ -62,11 +62,11 @@ namespace VRStandardAssets.Utils
             // Show the debug ray if required
             if (m_ShowDebugRay)
             {
-                Debug.DrawRay(m_Camera.position, m_Camera.forward * m_DebugRayLength, Color.blue, m_DebugRayDuration);
+                Debug.DrawRay(transform.position, transform.forward * m_DebugRayLength, Color.blue, m_DebugRayDuration);
             }
 
             // Create a ray that points forwards from the camera.
-            Ray ray = new Ray(m_Camera.position, m_Camera.forward);
+            Ray ray = new Ray(transform.position, transform.forward);
             RaycastHit hit;
             
             // Do the raycast forweards to see if we hit an interactive item

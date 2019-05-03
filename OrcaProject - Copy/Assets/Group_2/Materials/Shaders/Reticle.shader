@@ -39,7 +39,7 @@
 			v2f vert(appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_P, v.vertex / 10 + float4(0, 0, -3, 0));
+				o.vertex = mul(UNITY_MATRIX_P, v.vertex / 30 + float4(0, 0, -3, 0));
 				//o.vertex = UnityObjectToClipPos(v.vertex);
 
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);

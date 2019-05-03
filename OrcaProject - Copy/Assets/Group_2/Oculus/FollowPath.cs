@@ -12,7 +12,7 @@ public class FollowPath : MonoBehaviour
     public float triggerDistance;
     public List<Transform> waypoints;
     public PostProcessVolume post;
-
+    public GameObject VRCam;
     public int current, target;
     private float initialVignette;
     // Start is called before the first frame update
@@ -32,9 +32,9 @@ public class FollowPath : MonoBehaviour
     {
         Vignette VignetteLayer = null;
         post.profile.TryGetSettings(out VignetteLayer);
-        float amount = Mathf.Max(0, Input.GetAxis("Vertical"));
+        float amount = Mathf.Max(0, OVRInput.Get(OVRInput.RawAxis2D.RThumbstick).y);
         print(initialVignette + amount / 5);
-        VignetteLayer.intensity.value = initialVignette + amount / 8;
+        VignetteLayer.intensity.value = initialVignette + amount / 2;
 
         /*if (target < 6)
         {
@@ -52,11 +52,15 @@ public class FollowPath : MonoBehaviour
             if (!atTarget() && whale.GetComponent<WhalePath>().hasReached())
             {
                 Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick);//SecondaryThumbstick);
-                Debug.Log(xy);
+               // Debug.Log(xy);
                 Vector3 move = Vector3.zero;
 
-                move += Input.GetAxis("Horizontal") * transform.right;
-                move += Input.GetAxis("Vertical") * transform.forward;
+                xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+                //move += xy.x * transform.Find("OVRCameraRig").right;
+                move += xy.y * VRCam.transform.forward;
+                //print(transform.Find("OVRCameraRig").Find("CenterEyeAnchor").forward);
+                //Debug.DrawRay(transform.position, transform.Find("OVRCameraRig").forward * 1000, Color.red);
 
                 /*if (Input.GetKey(KeyCode.UpArrow) || (Mathf.Sign(xy.y) > 0 && xy.y != 0.0f))
                 {
@@ -66,14 +70,14 @@ public class FollowPath : MonoBehaviour
                 {
                     move = waypoints[current].position - player.position;
                 } */
-               /* if (move.magnitude > 0) {
-                    
-                    v.enabled.Override(true);
-                    v.intensity.Override(Mathf.Clamp(v.intensity + 0.05f, 0, 0.5f));
-                } else {
-                    v.enabled.Override(true);
-                    v.intensity.Override(Mathf.Clamp(v.intensity - 0.05f, 0, 0.5f));
-                }*/
+                /* if (move.magnitude > 0) {
+
+                     v.enabled.Override(true);
+                     v.intensity.Override(Mathf.Clamp(v.intensity + 0.05f, 0, 0.5f));
+                 } else {
+                     v.enabled.Override(true);
+                     v.intensity.Override(Mathf.Clamp(v.intensity - 0.05f, 0, 0.5f));
+                 }*/
                 player.position += move.normalized * playerSpeed * Time.deltaTime;
             }
         } else
