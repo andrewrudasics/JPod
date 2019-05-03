@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.XR;
 
 public class FollowPath : MonoBehaviour
 {
@@ -18,6 +19,13 @@ public class FollowPath : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        var device = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+        if(device != null)
+        {
+            device.TryGetFeatureValue()
+        }
+
         current = 0;
         target = 1;
         Vignette v = ScriptableObject.CreateInstance<Vignette>();
@@ -100,7 +108,9 @@ public class FollowPath : MonoBehaviour
         {
             updateTarget();
         }
+     
         
+
     }
 
     public bool atTarget() {
