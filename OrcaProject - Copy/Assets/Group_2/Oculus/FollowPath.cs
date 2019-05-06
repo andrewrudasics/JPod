@@ -23,7 +23,7 @@ public class FollowPath : MonoBehaviour
         var device = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
         if(device != null)
         {
-            device.TryGetFeatureValue()
+            //device.TryGetFeatureValue()
         }
 
         current = 0;
