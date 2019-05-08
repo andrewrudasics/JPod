@@ -41,7 +41,6 @@ public class FollowPath : MonoBehaviour
         Vignette VignetteLayer = null;
         post.profile.TryGetSettings(out VignetteLayer);
         float amount = Mathf.Max(0, OVRInput.Get(OVRInput.RawAxis2D.RThumbstick).y);
-        print(initialVignette + amount / 5);
         VignetteLayer.intensity.value = initialVignette + amount / 2;
 
         /*if (target < 6)

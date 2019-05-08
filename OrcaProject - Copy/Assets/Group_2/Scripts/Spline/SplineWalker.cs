@@ -37,7 +37,6 @@ public class SplineWalker : MonoBehaviour
         float prev = 0;
         float dt = Time.deltaTime;
         float s = speed * (1 - 2 * spline.GetCurvature(progress));
-        print(s);
         while (Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * s) > 0.01f)
         {
             float p = Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * s);

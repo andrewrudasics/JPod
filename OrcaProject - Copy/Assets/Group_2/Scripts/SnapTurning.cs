@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class SnapTurning : MonoBehaviour
 {
@@ -8,22 +9,25 @@ public class SnapTurning : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        prev = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector2 xy = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
-        if (!prev && (xy.y == 1 || xy.y == -1))
-        {
-            prev = true;
-            StartCoroutine(Snap(0.2f, 30f));   
-        }
-        if (!(xy.y == 1 || xy.y == -1))
+        //print((Mathf.Abs(xy.x) - 1) + " " + (Mathf.Abs(Mathf.Abs(xy.x) - 1) < 0.01));
+        if (!(Mathf.Abs(Mathf.Abs(xy.x) - 1) < 0.1))
         {
             prev = false;
         }
+        if (!prev && (Mathf.Abs(Mathf.Abs(xy.x) - 1) < 0.1))
+        {
+            print("snap");
+            prev = true;
+            StartCoroutine(Snap(0.001f, 40f * xy.x / Mathf.Abs(xy.x)));   
+        }
+        
     }
 
     IEnumerator Snap(float duration, float degree)
@@ -31,7 +35,7 @@ public class SnapTurning : MonoBehaviour
         float t = 0;
         while (t < duration)
         {
-            transform.Rotate(new Vector3(0, degree * Time.deltaTime / duration, 0), Space.Self);
+            transform.Rotate(new Vector3(0, degree * Mathf.Min(1, Time.deltaTime / duration), 0), Space.World);
             t += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
