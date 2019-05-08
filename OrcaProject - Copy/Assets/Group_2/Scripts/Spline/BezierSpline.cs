@@ -141,7 +141,44 @@ public class BezierSpline : MonoBehaviour
         return GetVelocity(t).normalized;
     }
 
-    
+    public Vector3 GetSecondDerivative(float t)
+    {
+        int i;
+        if (t >= 1f)
+        {
+            t = 1f;
+            i = points.Length - 4;
+        }
+        else
+        {
+            t = Mathf.Clamp01(t) * CurveCount;
+            i = (int)t;
+            t -= i;
+            i *= 3;
+        }
+        return Bezier.GetSecondDerivative(points[i], points[i + 1], points[i + 2], points[i + 3], t);
+    }
+
+    public float GetCurvature(float t)
+    {
+        int i;
+        if (t >= 1f)
+        {
+            t = 1f;
+            i = points.Length - 4;
+        }
+        else
+        {
+            t = Mathf.Clamp01(t) * CurveCount;
+            i = (int)t;
+            t -= i;
+            i *= 3;
+        }
+        return Vector3.Cross(Bezier.GetFirstDerivative(points[i], points[i + 1], points[i + 2], points[i + 3], t),
+            Bezier.GetSecondDerivative(points[i], points[i + 1], points[i + 2], points[i + 3], t)).magnitude /
+            Mathf.Pow(Bezier.GetFirstDerivative(points[i], points[i + 1], points[i + 2], points[i + 3], t).magnitude, 3);
+    }
+
     public void AddCurve()
     {
         Vector3 point = points[points.Length - 1];

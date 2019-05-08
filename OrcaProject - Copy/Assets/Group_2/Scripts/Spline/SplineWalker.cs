@@ -36,16 +36,18 @@ public class SplineWalker : MonoBehaviour
         float checker = 0;
         float prev = 0;
         float dt = Time.deltaTime;
-        while (Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * speed) > 0.01f)
+        float s = speed * (1 - 2 * spline.GetCurvature(progress));
+        print(s);
+        while (Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * s) > 0.01f)
         {
-            float p = Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * speed);
+            float p = Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * s);
             checker += Time.deltaTime;
             if (checker > 3)
             {
                 print("x");
                 break;
             }
-            if ((transform.position - spline.GetPoint(progress + dt)).magnitude > Time.deltaTime * speed)
+            if ((transform.position - spline.GetPoint(progress + dt)).magnitude > Time.deltaTime * s)
             {
                 dt = (dt + prev) / 2;
             } else

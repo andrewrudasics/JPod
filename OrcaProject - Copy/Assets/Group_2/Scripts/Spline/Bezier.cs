@@ -24,5 +24,14 @@ public static class Bezier
             3f * t * t * (p3 - p2);
     }
 
-
+    public static Vector3 GetSecondDerivative(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+    {
+        t = Mathf.Clamp01(t);
+        float oneMinusT = 1f - t;
+        return
+            6f * oneMinusT * (p0 - p1) +
+            6f * (p2 - p1) +
+            12f * t * (p1 - p2) +
+            6f * t * (p3 - p2);
+    }
 }
