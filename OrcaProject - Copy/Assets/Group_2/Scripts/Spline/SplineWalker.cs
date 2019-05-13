@@ -7,16 +7,19 @@ public class SplineWalker : MonoBehaviour
     public bool lookForward;
     public float duration;
     public float speed;
+    public float adjustmentTime;
+
     private float progress;
+    private Vector3 rotationBeforeAdjustment;
 
     private void Start()
     {
         transform.position = spline.GetPoint(0);
         transform.forward = spline.GetDirection(0);
+        adjustmentTime = 0;
     }
     public void move()
     {
-        
         progress += getProperTime();
         
         if (progress > 1f)
@@ -24,11 +27,39 @@ public class SplineWalker : MonoBehaviour
             progress = 1f;
         }
         Vector3 position = spline.GetPoint(progress);
-        transform.position = position;
-        if (lookForward)
+        if (GetComponent<WhalePath>().StartAdjustment())
         {
-            transform.LookAt(position + spline.GetDirection(progress));
+            if (adjustmentTime == 0)
+            {
+                rotationBeforeAdjustment = transform.forward;
+            }
+            adjustmentTime += Time.deltaTime;
+            Vector3 adjustedPosition = Vector3.Lerp(transform.position + transform.forward.normalized  * Time.deltaTime,
+                                                    position, 
+                                                    Mathf.Pow(adjustmentTime / 2, 3));
+            if (adjustmentTime >= 2)
+            {
+                GetComponent<WhalePath>().AdjustmentDone();
+                adjustmentTime = 0;
+            }
+            GetComponent<Rigidbody>().MovePosition(adjustedPosition);
+
+            if (lookForward)
+            {
+                Vector3 adjustedRotation = Vector3.Lerp(rotationBeforeAdjustment, spline.GetDirection(progress + 0.002f), adjustmentTime / 2);
+               
+                transform.forward = adjustedRotation;
+            }
+
+        } else
+        {
+            GetComponent<Rigidbody>().MovePosition(position);
+            if (lookForward)
+            {
+                transform.forward = spline.GetDirection(progress + 0.002f);
+            }
         }
+        
     }
 
     private float getProperTime()
@@ -36,7 +67,7 @@ public class SplineWalker : MonoBehaviour
         float checker = 0;
         float prev = 0;
         float dt = Time.deltaTime;
-        float s = speed * (1 - 2 * spline.GetCurvature(progress));
+        float s = GetSpeed();
         while (Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * s) > 0.01f)
         {
             float p = Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * s);
@@ -57,5 +88,11 @@ public class SplineWalker : MonoBehaviour
             
         }
         return dt;
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
+        //return speed * Mathf.Max(0.5f, (1 - 2 * spline.GetCurvature(progress)));
     }
 }

@@ -14,7 +14,7 @@ public class WhalePath : MonoBehaviour
     public float moveSpeed = 3.0f;
     public float lookSpeed = 2.0f;
     public float triggerDistance, playerTrigger, celebrationTime;
-    public List<Transform> waypoints;
+    public BezierSpline curve;
     public AudioSource wsrc;
 
 
@@ -24,6 +24,9 @@ public class WhalePath : MonoBehaviour
 
     //temporyrary variable, used to remove turning(transform);
     private bool flag = true;
+
+    private bool startAdjustment;
+    private bool arrivalAdjustmentDone;
 
     // Start is called before the first frame update
     void Start()
@@ -51,8 +54,8 @@ public class WhalePath : MonoBehaviour
                 // to stop turning, replace true with flag
                 if (flag)
                 {
-                    var targetRotation = Quaternion.LookRotation(lookTarget.transform.position - transform.position);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
+                    //var targetRotation = Quaternion.LookRotation(lookTarget.transform.position - transform.position);
+                    //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
                 }
             }
             else
@@ -80,8 +83,9 @@ public class WhalePath : MonoBehaviour
                 {
                     anim.SetBool("Follow", true);
                     anim.SetBool("Swim", false);
-
+                    print("co");
                     prev = reached;
+                    StartCoroutine(adjustRotation(2f));
                 }
 
 
@@ -97,6 +101,12 @@ public class WhalePath : MonoBehaviour
                 else if (!playerReached)
                 {
                     prevR = false;
+                    if (arrivalAdjustmentDone)
+                    {
+                        print("looking");
+                        transform.LookAt(player);
+                    }
+                        
                 }
                 if (Time.time - celebrationStart > celebrationTime && celebrating)
                 {
@@ -105,14 +115,15 @@ public class WhalePath : MonoBehaviour
             }
             else
             {
+                print("wrong");
                 reached = false;
                 prev = false;
-                lookTarget = (waypoints[target]);
+                //lookTarget = (curve.GetWaypoint(target));
             }
 
             if (anim.GetBool("Swim"))
             {
-                if (target < waypoints.Count)
+                if (target < 7)
                 {
                     GetComponent<SplineWalker>().move();
                 }
@@ -128,7 +139,7 @@ public class WhalePath : MonoBehaviour
 
     private bool atTarget()
     {
-        return ((whale.position - waypoints[target].position).magnitude < triggerDistance);
+        return ((transform.position - curve.GetWaypoint(target)).magnitude < triggerDistance);
     }
 
     // This method will be called when:
@@ -139,8 +150,10 @@ public class WhalePath : MonoBehaviour
         celebrating = false;
         anim.SetBool("Celebrating", false);
         current = target;
+        startAdjustment = true;
+        arrivalAdjustmentDone = false;
 
-        if (target < waypoints.Count - 1)
+        if (target < 7 - 1)
         {
             anim.SetBool("Swim", true);
             target++;
@@ -170,5 +183,29 @@ public class WhalePath : MonoBehaviour
     {
         print("setting flat");
         flag = true;
+    }
+    public bool StartAdjustment()
+    {
+        return startAdjustment;
+    }
+
+    public void AdjustmentDone()
+    {
+        startAdjustment = false;
+    }
+
+    IEnumerator adjustRotation(float duration)
+    {
+        float time = 0;
+        Vector3 original = transform.position + transform.forward * (player.position - transform.position).magnitude;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            print(time / duration);
+            transform.LookAt(Vector3.Lerp(original, player.position, time / duration));
+            yield return new WaitForEndOfFrame();
+        }
+        arrivalAdjustmentDone = true;
+        yield return null;
     }
 }

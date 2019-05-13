@@ -32,7 +32,7 @@ public class FollowPath : MonoBehaviour
         Vignette VignetteLayer = null;
         post.profile.TryGetSettings(out VignetteLayer);
         initialVignette = VignetteLayer.intensity.value;
-        print("iv" + initialVignette);
+    
     }
 
     // Update is called once per frame
@@ -113,7 +113,7 @@ public class FollowPath : MonoBehaviour
     }
 
     public bool atTarget() {
-        return ((player.position - waypoints[target].position).magnitude < triggerDistance);
+        return ((transform.position - whale.position).magnitude < triggerDistance);
     }
 
     public void updateTarget()

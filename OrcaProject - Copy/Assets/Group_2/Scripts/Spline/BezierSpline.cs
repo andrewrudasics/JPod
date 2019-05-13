@@ -6,10 +6,12 @@ public class BezierSpline : MonoBehaviour
 
     [SerializeField]
     private Vector3[] points;
+    private int[] waypointsIndex = {4, 7, 9, 11, 14, 16};
     [SerializeField]
     private BezierControlPointMode[] modes;
     [SerializeField]
     private bool loop;
+    
 
     public bool Loop
     {
@@ -177,6 +179,12 @@ public class BezierSpline : MonoBehaviour
         return Vector3.Cross(Bezier.GetFirstDerivative(points[i], points[i + 1], points[i + 2], points[i + 3], t),
             Bezier.GetSecondDerivative(points[i], points[i + 1], points[i + 2], points[i + 3], t)).magnitude /
             Mathf.Pow(Bezier.GetFirstDerivative(points[i], points[i + 1], points[i + 2], points[i + 3], t).magnitude, 3);
+    }
+
+    public Vector3 GetWaypoint(int i)
+    {
+        int index = waypointsIndex[i-1];
+        return transform.TransformPoint(points[3 * index]);
     }
 
     public void AddCurve()
