@@ -56,7 +56,7 @@ public class FollowPath : MonoBehaviour
         // used to be "if target < 5".
         if (true)
         {
-            if (!atTarget() && whale.GetComponent<WhalePath>().hasReached())
+            if (target == 6 || (!atTarget() && whale.GetComponent<WhalePath>().hasReached()))
             {
                 Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick);//SecondaryThumbstick);
                // Debug.Log(xy);
@@ -113,6 +113,10 @@ public class FollowPath : MonoBehaviour
     }
 
     public bool atTarget() {
+        if (target == 6)
+        {
+            return false;
+        }
         return ((transform.position - whale.position).magnitude < triggerDistance);
     }
 

@@ -64,7 +64,7 @@ public class WhalePath : MonoBehaviour
                 var targetRotation = Quaternion.LookRotation(new Vector3(player.position.x, 0, player.position.z) - new Vector3(transform.position.x, 0, transform.position.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
             }
-            playerReached = player.gameObject.GetComponent<FollowPath>().atTarget();
+            
 
             if (target > 3)
             {
@@ -73,49 +73,51 @@ public class WhalePath : MonoBehaviour
 
             if (atTarget())
             {
-                if (reached == false)
-                {
-                    flag = false;
-                }
                 reached = true;
-                lookTarget = player;
-                if (reached != prev)
+                if (target < 6)
                 {
-                    anim.SetBool("Follow", true);
-                    anim.SetBool("Swim", false);
-                    print("co");
-                    prev = reached;
-                    StartCoroutine(adjustRotation(2f));
-                }
+                    playerReached = player.gameObject.GetComponent<FollowPath>().atTarget();
 
-
-
-                if (playerReached && playerReached != prevR)
-                {
-                    celebrating = true;
-                    anim.SetBool("Celebrating", true);
-                    celebrationStart = Time.time;
-                    prevR = playerReached;
-                    wsrc.Play();
-                }
-                else if (!playerReached)
-                {
-                    prevR = false;
-                    if (arrivalAdjustmentDone)
+                    if (reached == false)
                     {
-                        print("looking");
-                        transform.LookAt(player);
+                        flag = false;
                     }
-                        
-                }
-                if (Time.time - celebrationStart > celebrationTime && celebrating)
-                {
+                    
+                    lookTarget = player;
+                    if (reached != prev)
+                    {
+                        anim.SetBool("Follow", true);
+                        anim.SetBool("Swim", false);
+                        prev = reached;
+                        StartCoroutine(adjustRotation(2f));
+                    }
 
+                    if (playerReached && playerReached != prevR)
+                    {
+                        celebrating = true;
+                        anim.SetBool("Celebrating", true);
+                        celebrationStart = Time.time;
+                        prevR = playerReached;
+                        wsrc.Play();
+                    }
+                    else if (!playerReached)
+                    {
+                        prevR = false;
+                        if (arrivalAdjustmentDone)
+                        {
+                            print("looking");
+                            transform.LookAt(player);
+                        }
+
+                    }
+                    if (Time.time - celebrationStart > celebrationTime && celebrating)
+                    {
+
+                    }
                 }
             }
             else
             {
-                print("wrong");
                 reached = false;
                 prev = false;
                 //lookTarget = (curve.GetWaypoint(target));
