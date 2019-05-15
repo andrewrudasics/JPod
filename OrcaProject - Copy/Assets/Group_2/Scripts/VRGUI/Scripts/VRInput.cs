@@ -38,6 +38,7 @@ namespace VRStandardAssets.Utils
         private float m_LastHorizontalValue;                        // The previous value of the horizontal axis used to detect keyboard swipes.
         private float m_LastVerticalValue;                          // The previous value of the vertical axis used to detect keyboard swipes.
 
+        private float OVR_PreviousTrigger;
 
         public float DoubleClickTime{ get { return m_DoubleClickTime; } }
 
@@ -53,8 +54,11 @@ namespace VRStandardAssets.Utils
             // Set the default swipe to be none.
             SwipeDirection swipe = SwipeDirection.NONE;
 
-            if (Input.GetButtonDown("Fire1") || OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.5f)
+            if (Input.GetButtonDown("Fire1") || (OVR_PreviousTrigger < 0.5 && OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0.5f))
             {
+                // Update OVR trigger value
+                OVR_PreviousTrigger = OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger);
+
                 // When Fire1 is pressed record the position of the mouse.
                 m_MouseDownPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             
@@ -82,8 +86,11 @@ namespace VRStandardAssets.Utils
                 OnSwipe(swipe);
 
             // This if statement is to trigger events based on the information gathered before.
-            if(Input.GetButtonUp ("Fire1"))
+            if(Input.GetButtonUp ("Fire1") || (OVR_PreviousTrigger > 0.5 && OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) < 0.5f))
             {
+                // Update OVR trigger value
+                OVR_PreviousTrigger = OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger);
+
                 // If anything has subscribed to OnUp call it.
                 if (OnUp != null)
                     OnUp();

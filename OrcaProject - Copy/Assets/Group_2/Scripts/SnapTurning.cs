@@ -25,7 +25,7 @@ public class SnapTurning : MonoBehaviour
         {
             print("snap");
             prev = true;
-            StartCoroutine(Snap(0.001f, 40f * xy.x / Mathf.Abs(xy.x)));   
+            transform.Rotate(new Vector3(0, 40 * Mathf.Sign(xy.x), 0), Space.World);
         }
         
     }

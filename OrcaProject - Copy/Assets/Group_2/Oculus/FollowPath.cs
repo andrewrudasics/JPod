@@ -40,7 +40,7 @@ public class FollowPath : MonoBehaviour
     {
         Vignette VignetteLayer = null;
         post.profile.TryGetSettings(out VignetteLayer);
-        float amount = Mathf.Max(0, OVRInput.Get(OVRInput.RawAxis2D.RThumbstick).y);
+        float amount = Mathf.Max(0, OVRInput.Get(OVRInput.RawAxis2D.LThumbstick).y);
         VignetteLayer.intensity.value = initialVignette + amount / 2;
 
         /*if (target < 6)
@@ -58,11 +58,11 @@ public class FollowPath : MonoBehaviour
         {
             if (target == 6 || (!atTarget() && whale.GetComponent<WhalePath>().hasReached()))
             {
-                Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick);//SecondaryThumbstick);
+                Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick);//SecondaryThumbstick);
                // Debug.Log(xy);
                 Vector3 move = Vector3.zero;
 
-                xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                //xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
                 //move += xy.x * transform.Find("OVRCameraRig").right;
                 move += xy.y * VRCam.transform.forward;
