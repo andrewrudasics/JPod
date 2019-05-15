@@ -133,7 +133,7 @@ public class BoatPhysics : MonoBehaviour
             //Debug.DrawRay(triangleData.center, triangleData.normal * 3f, Color.white);
 
             //Buoyancy
-            //Debug.DrawRay(triangleData.center, BoatPhysicsMath.BuoyancyForce(rhoWater, triangleData).normalized * -3f, Color.blue);
+            Debug.DrawRay(triangleData.center, BoatPhysicsMath.BuoyancyForce(rhoWater, triangleData).normalized * -3f, Color.blue);
 
             //Velocity
             //Debug.DrawRay(triangleCenter, triangleVelocityDir * 3f, Color.black);
