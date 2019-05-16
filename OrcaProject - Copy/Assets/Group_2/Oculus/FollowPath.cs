@@ -8,7 +8,8 @@ public class FollowPath : MonoBehaviour
 {
     [SerializeField]
     public Transform player, whale;
-    public float playerSpeed = 3.0f;
+    // The numerical speed
+    public float speed = 3.0f;
     public float lookSpeed = 0.5f;
     public float triggerDistance;
     public List<Transform> waypoints;
@@ -16,10 +17,13 @@ public class FollowPath : MonoBehaviour
     public GameObject VRCam;
     public int current, target;
     private float initialVignette;
+    // The reference speed used to calculated movement.
+    private Transform refTransform;
     // Start is called before the first frame update
     void Start()
     {
-
+        // no movement on y axis.
+        refSpeed = new Vector3(1, 0, 1);
         var device = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
         if(device != null)
         {
@@ -56,16 +60,16 @@ public class FollowPath : MonoBehaviour
         // used to be "if target < 5".
         if (true)
         {
-            if (target == 6 || (!atTarget() && whale.GetComponent<WhalePath>().hasReached()))
+            if (true || target == 6 || (!atTarget() && whale.GetComponent<WhalePath>().hasReached()))
             {
                 Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick);//SecondaryThumbstick);
                // Debug.Log(xy);
                 Vector3 move = Vector3.zero;
 
-                //xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
                 //move += xy.x * transform.Find("OVRCameraRig").right;
-                move += xy.y * VRCam.transform.forward;
+                move += xy.y * Vector3.Scale(refSpeed, transform.forward);
                 //print(transform.Find("OVRCameraRig").Find("CenterEyeAnchor").forward);
                 //Debug.DrawRay(transform.position, transform.Find("OVRCameraRig").forward * 1000, Color.red);
 
@@ -85,7 +89,7 @@ public class FollowPath : MonoBehaviour
                      v.enabled.Override(true);
                      v.intensity.Override(Mathf.Clamp(v.intensity - 0.05f, 0, 0.5f));
                  }*/
-                player.position += move.normalized * playerSpeed * Time.deltaTime;
+                player.position += move.normalized * speed * Time.deltaTime;
             }
         } else
         {
@@ -100,7 +104,7 @@ public class FollowPath : MonoBehaviour
             {
                 move = waypoints[5].position - player.position;
             }
-            player.position += move.normalized * playerSpeed * Time.deltaTime;
+            player.position += move.normalized * speed * Time.deltaTime;
         }
 
         if (atTarget() && target == 6)
@@ -133,4 +137,11 @@ public class FollowPath : MonoBehaviour
         }
     }
     
+    // Sets the player speed based on the given ratio and transform
+    public void SetPlayerSpeed(float ratio, Transform t)
+    {
+        Vector3 dir = Vector3.Scale(refSpeed, transform.forward).normalized;
+        Vector3 localDir = t.InverseTransformDirection(dir);
+        localDir.x *= ratio;        
+    }
 }

@@ -105,7 +105,6 @@ public class WhalePath : MonoBehaviour
                         prevR = false;
                         if (arrivalAdjustmentDone)
                         {
-                            print("looking");
                             transform.LookAt(player);
                         }
 
@@ -203,7 +202,6 @@ public class WhalePath : MonoBehaviour
         while (time < duration)
         {
             time += Time.deltaTime;
-            print(time / duration);
             transform.LookAt(Vector3.Lerp(original, player.position, time / duration));
             yield return new WaitForEndOfFrame();
         }

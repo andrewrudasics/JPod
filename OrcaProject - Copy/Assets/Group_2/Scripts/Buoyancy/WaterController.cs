@@ -34,7 +34,7 @@ public class WaterController : MonoBehaviour
         //return 0f;
         //}
 
-        return 0f;
+        return transform.position.y;
     }
 
     //Find the distance from a vertice to water

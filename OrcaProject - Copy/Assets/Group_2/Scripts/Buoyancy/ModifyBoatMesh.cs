@@ -37,6 +37,8 @@ public class ModifyBoatMesh
     //The total area of the entire boat
     public float boatArea;
 
+    private List<Vector3> intersectionVertices;
+
     float timeSinceStart;
 
     public ModifyBoatMesh(GameObject boatObj, GameObject underWaterObj, GameObject aboveWaterObj, Rigidbody boatRB)
@@ -73,11 +75,13 @@ public class ModifyBoatMesh
     }
 
     //Generate the underwater mesh (and the abovewater mesh)
-    public void GenerateUnderwaterMesh()
+    public void GenerateUnderwaterMesh(List<Vector3> intersectionVertices)
     {
         //Reset
         aboveWaterTriangleData.Clear();
         underWaterTriangleData.Clear();
+        this.intersectionVertices = intersectionVertices;
+        this.intersectionVertices.Clear();
 
         //Switch the submerged triangle area with the one in the previous time step
         for (int j = 0; j < slammingForceData.Count; j++)
@@ -281,6 +285,9 @@ public class ModifyBoatMesh
         indexOfOriginalTriangle.Add(triangleCounter);
         //Add 2 times because 2 submerged triangles need to connect to the same original triangle
         indexOfOriginalTriangle.Add(triangleCounter);
+
+        intersectionVertices.Add(I_M);
+        intersectionVertices.Add(I_L);
     }
 
 
@@ -288,6 +295,7 @@ public class ModifyBoatMesh
     //Build the new triangles where two of the old vertices are above the water
     private void AddTrianglesTwoAboveWater(List<VertexData> vertexData, int triangleCounter)
     {
+        
         //H and M are above the water
         //H is after the vertice that's below water, which is L
         //So we know which one is L because it is last in the sorted list
@@ -361,6 +369,9 @@ public class ModifyBoatMesh
         slammingForceData[triangleCounter].submergedArea = BoatPhysicsMath.GetTriangleArea(L, J_H, J_M);
 
         indexOfOriginalTriangle.Add(triangleCounter);
+
+        intersectionVertices.Add(J_H);
+        intersectionVertices.Add(J_M);
     }
 
 

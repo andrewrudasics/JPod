@@ -16,8 +16,9 @@ public class BoatDriver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 xyz = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        print(xyz);
-        rb.AddForceAtPosition(xyz, engine.position);
+        Vector3 xyz = new Vector3(0, 0, 0);
+        xyz += Input.GetAxis("Horizontal") * transform.right;
+        xyz += Input.GetAxis("Vertical") * transform.up;
+        rb.AddForce(xyz * force);
     }
 }

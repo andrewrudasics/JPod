@@ -11,11 +11,19 @@ public class BoatPhysics : MonoBehaviour
     public GameObject underWaterObj;
     public GameObject aboveWaterObj;
 
+    //For water reflection
+    public GameObject underWaterMirrorObj;
+    //The foam
+    public GameObject foamSkirtObj;
+
     //Change the center of mass
     public Vector3 centerOfMass;
 
     //Script that's doing everything needed with the boat mesh, such as finding out which part is above the water
     private ModifyBoatMesh modifyBoatMesh;
+
+    private Mesh underWaterMirrorMesh;
+    private Mesh foamMesh;
 
     //Meshes for debugging
     private Mesh underWaterMesh;
@@ -28,6 +36,12 @@ public class BoatPhysics : MonoBehaviour
     private float rhoWater = BoatPhysicsMath.RHO_OCEAN_WATER;
     private float rhoAir = BoatPhysicsMath.RHO_AIR;
 
+    //A list with all vertices that are at the intersection point between the air and water
+    private List<Vector3> intersectionVertices = new List<Vector3>();
+
+    //Script that displays extra meshes, generate a mirrored mesh and a foam skirt
+    private GenerateExtraBoatMeshes generateExtraMeshes;
+
     void Awake()
     {
         boatRB = this.GetComponent<Rigidbody>();
@@ -38,21 +52,32 @@ public class BoatPhysics : MonoBehaviour
         //Init the script that will modify the boat mesh
         modifyBoatMesh = new ModifyBoatMesh(boatMeshObj, underWaterObj, aboveWaterObj, boatRB);
 
+        generateExtraMeshes = new GenerateExtraBoatMeshes(boatMeshObj);
+
         //Meshes that are below and above the water
         underWaterMesh = underWaterObj.GetComponent<MeshFilter>().mesh;
         aboveWaterMesh = aboveWaterObj.GetComponent<MeshFilter>().mesh;
+
+        underWaterMirrorMesh = underWaterMirrorObj.GetComponent<MeshFilter>().mesh;
+        foamMesh = foamSkirtObj.GetComponent<MeshFilter>().mesh;
     }
 
     void Update()
     {
         //Generate the under water and above water meshes
-        modifyBoatMesh.GenerateUnderwaterMesh();
+        modifyBoatMesh.GenerateUnderwaterMesh(intersectionVertices);
 
         //Display the under water mesh - is always needed to get the underwater length for forces calculations
-        modifyBoatMesh.DisplayMesh(underWaterMesh, "UnderWater Mesh", modifyBoatMesh.underWaterTriangleData);
+        //generateExtraMeshes.DisplayMesh(underWaterMesh, "UnderWater Mesh", modifyBoatMesh.underWaterTriangleData);
 
         //Display the above water mesh
-        //modifyBoatMesh.DisplayMesh(aboveWaterMesh, "AboveWater Mesh", modifyBoatMesh.aboveWaterTriangleData);
+        //generateExtraMeshes.DisplayMesh(aboveWaterMesh, "AboveWater Mesh", modifyBoatMesh.aboveWaterTriangleData);
+
+        //Display the mesh that's the mirror
+        //generateExtraMeshes.DisplayMirrorMesh(underWaterMirrorMesh, "UnderwaterWater Mirror Mesh", modifyBoatMesh.aboveWaterTriangleData);
+
+        //Generate the foam skirt
+        generateExtraMeshes.GenerateFoamSkirt(foamMesh, "Foam skirt", intersectionVertices);
     }
 
     void FixedUpdate()
@@ -133,7 +158,7 @@ public class BoatPhysics : MonoBehaviour
             //Debug.DrawRay(triangleData.center, triangleData.normal * 3f, Color.white);
 
             //Buoyancy
-            Debug.DrawRay(triangleData.center, BoatPhysicsMath.BuoyancyForce(rhoWater, triangleData).normalized * -3f, Color.blue);
+            //Debug.DrawRay(triangleData.center, BoatPhysicsMath.BuoyancyForce(rhoWater, triangleData).normalized * -3f, Color.blue);
 
             //Velocity
             //Debug.DrawRay(triangleCenter, triangleVelocityDir * 3f, Color.black);
