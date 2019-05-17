@@ -95,7 +95,6 @@ public class GenerateExtraBoatMeshes
         }
         //Display in which order the vertices have been added to the list
         //DisplayVerticesOrderHeight(cleanedVertices, Color.green);
-        Debug.Log(cleanedVertices.Count);
 
         //Step 2. Sort the vertices
         List<Vector3> sortedVertices = ConvexHull.SortVerticesConvexHull(cleanedVertices);

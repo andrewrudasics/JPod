@@ -23,7 +23,7 @@ public class FollowPath : MonoBehaviour
     void Start()
     {
         // no movement on y axis.
-        refSpeed = new Vector3(1, 0, 1);
+        //refSpeed = new Vector3(1, 0, 1);
         var device = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
         if(device != null)
         {
@@ -69,7 +69,11 @@ public class FollowPath : MonoBehaviour
                 xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
                 //move += xy.x * transform.Find("OVRCameraRig").right;
-                move += xy.y * Vector3.Scale(refSpeed, transform.forward);
+
+                //move += xy.y * Vector3.Scale(refSpeed, transform.forward);
+
+                move += xy.y * VRCam.transform.forward;
+
                 //print(transform.Find("OVRCameraRig").Find("CenterEyeAnchor").forward);
                 //Debug.DrawRay(transform.position, transform.Find("OVRCameraRig").forward * 1000, Color.red);
 
@@ -136,7 +140,7 @@ public class FollowPath : MonoBehaviour
             target--;
         }
     }
-    
+    /*
     // Sets the player speed based on the given ratio and transform
     public void SetPlayerSpeed(float ratio, Transform t)
     {
@@ -144,4 +148,5 @@ public class FollowPath : MonoBehaviour
         Vector3 localDir = t.InverseTransformDirection(dir);
         localDir.x *= ratio;        
     }
+    */
 }

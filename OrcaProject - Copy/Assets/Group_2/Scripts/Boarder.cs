@@ -32,12 +32,12 @@ public class Boarder : MonoBehaviour
             
             Vector3 otherInLocal = transform.InverseTransformPoint(other.transform.position);
             Vector3 forwardInLocal = transform.InverseTransformDirection(other.transform.forward);
-            Vector3
+            
 
             print(otherInLocal.x);
             float ratio = Mathf.Clamp01(1 - Mathf.Abs(otherInLocal.x - (bc.size.x) / 2) / penetrationDistance);
             
-            other.gameObject.GetComponent<FollowPath>().SetPlayerSpeed(ratio);
+            //other.gameObject.GetComponent<FollowPath>().SetPlayerSpeed(ratio);
         }
     }
 }
