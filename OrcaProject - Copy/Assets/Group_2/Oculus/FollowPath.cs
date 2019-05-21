@@ -15,6 +15,7 @@ public class FollowPath : MonoBehaviour
     public List<Transform> waypoints;
     public PostProcessVolume post;
     public GameObject VRCam;
+    public bool debug;
     // The original waypoits are no longer used.
     public int current, target;
     public float collisionDistance;
@@ -88,7 +89,12 @@ public class FollowPath : MonoBehaviour
             {
                 move.x = 0;
                 move.z = 0;
-                move = move.normalized;
+                if (transform.position.y < -34)
+                    move = move.normalized;
+                else
+                {
+                    move.y = 0;
+                }
             }
             else if (target > 3)
             {
@@ -101,6 +107,12 @@ public class FollowPath : MonoBehaviour
                 move = Vector3.ProjectOnPlane(move, planeNormal).normalized;
             }
             
+            if (debug)
+            {
+                move = new Vector3(0, 0, 0);
+                move += xy.y * VRCam.transform.forward;
+            }
+
             // Check Collision
             if (!willCollide(move))
             {
@@ -126,7 +138,7 @@ public class FollowPath : MonoBehaviour
             return false;
         }
         Vector3 xz = new Vector3((transform.position - whale.position).x, 0, (transform.position - whale.position).z);
-        return (xz.magnitude < triggerDistance) && ((transform.position - whale.position).y < 2);
+        return (xz.magnitude < triggerDistance) && ((transform.position - whale.position).y < 5);
     }
 
     public void updateTarget()

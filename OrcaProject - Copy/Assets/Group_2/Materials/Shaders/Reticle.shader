@@ -6,10 +6,9 @@
     }
     SubShader
     {
-		Tags { "Queue" = "Overlay" "RenderType" = "Transparent"}
-		LOD 100
-		Blend SrcAlpha One
-		Ztest Always
+        Tags { "RenderType"="Opaque" }
+        LOD 100
+
         Pass
         {
             CGPROGRAM
@@ -36,16 +35,14 @@
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
-			v2f vert(appdata v)
-			{
-				v2f o;
-				o.vertex = mul(UNITY_MATRIX_P, v.vertex / 30 + float4(0, 0, -3, 0));
-				//o.vertex = UnityObjectToClipPos(v.vertex);
-
-				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-				//UNITY_TRANSFER_FOG(o,o.vertex);
-				return o;
-			}
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                UNITY_TRANSFER_FOG(o,o.vertex);
+                return o;
+            }
 
             fixed4 frag (v2f i) : SV_Target
             {

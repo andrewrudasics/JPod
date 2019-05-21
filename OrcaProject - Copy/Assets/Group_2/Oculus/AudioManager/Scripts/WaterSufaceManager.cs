@@ -12,7 +12,7 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
     public PostProcessVolume abovewaterPostprocessing;
     public PostProcessVolume waterSurfacePostprocessing;
 
-    private float threshold = 0.5f;
+    private float threshold = 1.5f;
     private float initialWeightAbove;
     private float initialWeightUnder;
 
@@ -38,9 +38,7 @@ public class WaterSufaceManager : Singleton<WaterSufaceManager> {
         float percentage = 0;
         
 
-        percentage = 1 - Mathf.Abs(player.position.y - waterSurface.position.y) / threshold;
-        percentage = Mathf.Max(percentage, 0);
-        percentage = Mathf.Min(percentage, 1);
+        percentage = 1.0f - Mathf.Clamp01((Mathf.Abs(player.position.y - waterSurface.position.y) - 0.5f) / threshold);
         waterSurfacePostprocessing.weight = Mathf.Lerp(0, 1, percentage);
         underwaterPostprocessing.weight = Mathf.Lerp(initialWeightUnder, 0, percentage);
         abovewaterPostprocessing.weight = Mathf.Lerp(initialWeightAbove, 0, percentage);
