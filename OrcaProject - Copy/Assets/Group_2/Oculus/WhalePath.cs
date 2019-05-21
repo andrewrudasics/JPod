@@ -90,6 +90,7 @@ public class WhalePath : MonoBehaviour
                         anim.SetBool("Swim", false);
                         prev = reached;
                         StartCoroutine(adjustRotation(2f));
+                        CheckBorderUpdates();
                     }
 
                     if (playerReached && playerReached != prevR)
@@ -207,5 +208,11 @@ public class WhalePath : MonoBehaviour
         }
         arrivalAdjustmentDone = true;
         yield return null;
+    }
+
+    // Check if the current border needs updating
+    private void CheckBorderUpdates()
+    {
+        GetComponent<BorderManager>().UpdateBorder();
     }
 }

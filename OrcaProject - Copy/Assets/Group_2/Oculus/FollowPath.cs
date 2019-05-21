@@ -15,10 +15,15 @@ public class FollowPath : MonoBehaviour
     public List<Transform> waypoints;
     public PostProcessVolume post;
     public GameObject VRCam;
+    // The original waypoits are no longer used.
     public int current, target;
+    public float collisionDistance;
     private float initialVignette;
-    // The reference speed used to calculated movement.
-    private Transform refTransform;
+    private Collision TerrainCollision;
+    // Where the player starts during *this* round
+    private Vector3 startPoint;
+    private bool prevWhaleReached;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,59 +62,54 @@ public class FollowPath : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
         }*/
 
-        // used to be "if target < 5".
-        if (true)
+        // When the whale has just reached the target, save the player's current position as the starting point
+        if (!prevWhaleReached && whale.GetComponent<WhalePath>().hasReached())
         {
-            if (true || target == 6 || (!atTarget() && whale.GetComponent<WhalePath>().hasReached()))
-            {
-                Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick);//SecondaryThumbstick);
-               // Debug.Log(xy);
-                Vector3 move = Vector3.zero;
-
-                xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-                //move += xy.x * transform.Find("OVRCameraRig").right;
-
-                //move += xy.y * Vector3.Scale(refSpeed, transform.forward);
-
-                move += xy.y * VRCam.transform.forward;
-
-                //print(transform.Find("OVRCameraRig").Find("CenterEyeAnchor").forward);
-                //Debug.DrawRay(transform.position, transform.Find("OVRCameraRig").forward * 1000, Color.red);
-
-                /*if (Input.GetKey(KeyCode.UpArrow) || (Mathf.Sign(xy.y) > 0 && xy.y != 0.0f))
-                {
-                    move = waypoints[target].position - player.position;
-                }
-                else if (Input.GetKey(KeyCode.DownArrow) || (Mathf.Sign(xy.y) < 0 && xy.y != 0.0f))
-                {
-                    move = waypoints[current].position - player.position;
-                } */
-                /* if (move.magnitude > 0) {
-
-                     v.enabled.Override(true);
-                     v.intensity.Override(Mathf.Clamp(v.intensity + 0.05f, 0, 0.5f));
-                 } else {
-                     v.enabled.Override(true);
-                     v.intensity.Override(Mathf.Clamp(v.intensity - 0.05f, 0, 0.5f));
-                 }*/
-                player.position += move.normalized * speed * Time.deltaTime;
-            }
-        } else
-        {
-            Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick); //SecondaryThumbstick);
-            Debug.Log(xy);
-            Vector3 move = Vector3.zero;
-            if (Input.GetKey(KeyCode.UpArrow) || (Mathf.Sign(xy.y) > 0 && xy.y != 0.0f))
-            {
-                move = waypoints[6].position - player.position;
-            }
-            else if (Input.GetKey(KeyCode.DownArrow) || (Mathf.Sign(xy.y) < 0 && xy.y != 0.0f))
-            {
-                move = waypoints[5].position - player.position;
-            }
-            player.position += move.normalized * speed * Time.deltaTime;
+            startPoint = transform.position;
         }
+        // used to be "if target < 5".
+        if (target == 6 || (!atTarget() && whale.GetComponent<WhalePath>().hasReached()))
+        {
+            // For oculus input
+            Vector2 xy = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick);//SecondaryThumbstick);
+
+            Vector3 move = Vector3.zero;
+            // For PC imput.
+            xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            // VRCam.forward is where the player looks at.
+            move += xy.y * VRCam.transform.forward;
+
+            // Check if the player is inside any border.
+            move = GetComponent<SplineBorderVelocity>().GetVelocity(move);
+
+            // If target > 3 (the player is moving towards the surface),
+            // then let the player moving in a inclided plane.
+            if (target == 6)
+            {
+                move.x = 0;
+                move.z = 0;
+                move = move.normalized;
+            }
+            else if (target > 3)
+            {
+                Vector3 dest = whale.transform.position +  new Vector3((startPoint - whale.transform.position).x, 0,
+                                                                       (startPoint - whale.transform.position).z).normalized * 5;
+                Vector3 startToTarget = dest - startPoint;
+                Vector3 right = Vector3.Cross(startToTarget, new Vector3(0, 1, 0));
+                Vector3 planeNormal = Vector3.Cross(right, startToTarget).normalized;
+                
+                move = Vector3.ProjectOnPlane(move, planeNormal).normalized;
+            }
+            
+            // Check Collision
+            if (!willCollide(move))
+            {
+                player.position += move * speed * Time.deltaTime;
+            }
+
+
+        }
+
 
         if (atTarget() && target == 6)
         {
@@ -125,7 +125,8 @@ public class FollowPath : MonoBehaviour
         {
             return false;
         }
-        return ((transform.position - whale.position).magnitude < triggerDistance);
+        Vector3 xz = new Vector3((transform.position - whale.position).x, 0, (transform.position - whale.position).z);
+        return (xz.magnitude < triggerDistance) && ((transform.position - whale.position).y < 2);
     }
 
     public void updateTarget()
@@ -149,4 +150,27 @@ public class FollowPath : MonoBehaviour
         localDir.x *= ratio;        
     }
     */
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        TerrainCollision = collision;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        TerrainCollision = null;
+    }
+
+    private bool willCollide(Vector3 dir)
+    {
+        if (TerrainCollision != null)
+        {
+            float cos = Vector3.Dot(dir.normalized, (TerrainCollision.GetContact(0).point - transform.position).normalized);
+            return cos > 0;
+        }
+        return false;
+        
+    }
+
+
 }
