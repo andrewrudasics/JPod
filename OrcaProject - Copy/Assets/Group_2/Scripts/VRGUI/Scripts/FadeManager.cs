@@ -7,6 +7,7 @@ namespace VRStandardAssets.Utils
 {
     public class FadeManager : MonoBehaviour
     {
+        public GameObject whale;
         // Start is called before the first frame update
         void Start()
         {
@@ -15,6 +16,7 @@ namespace VRStandardAssets.Utils
 
         public void fade()
         {
+            whale.GetComponent<Animator>().SetBool("Start", true);
             GetComponent<UIFader>().StartCoroutine("FadeOut");
         }
     }

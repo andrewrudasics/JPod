@@ -45,7 +45,6 @@ public class WhalePath : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (start)
         {
             end = target == 6 && atTarget();
@@ -178,7 +177,11 @@ public class WhalePath : MonoBehaviour
 
     public void StartMoves()
     {
-        start = true;
+        if (anim.GetBool("Start"))
+        {
+            start = true;
+        }
+        
     }
 
     public void SetFlag(int i)
