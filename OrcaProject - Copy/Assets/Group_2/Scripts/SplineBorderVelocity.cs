@@ -39,6 +39,7 @@ public class SplineBorderVelocity : MonoBehaviour
         if (nextRadialDistance > currentRadialDistance)
         {
             delta *= (1 - ratio);
+            // Recalculate 
             nextFollowerPosi = GetComponent<SplineFollower>().GetPosition(X0Z(transform.position + delta));
             nextRadialDistance = X0Z(transform.position + delta - spline.transform.position).magnitude -
                                    X0Z(nextFollowerPosi - spline.transform.position).magnitude;
