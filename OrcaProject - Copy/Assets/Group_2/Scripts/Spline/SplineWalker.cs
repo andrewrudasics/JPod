@@ -8,19 +8,21 @@ public class SplineWalker : MonoBehaviour
     public float duration;
     public float speed;
     public float adjustmentTime;
-
+    public float startProgress;
+    public GameObject dummy;
     private float progress;
     private Vector3 rotationBeforeAdjustment;
 
     private void Start()
     {
-        transform.position = spline.GetPoint(0);
+        transform.position = spline.GetPoint(startProgress);
         transform.forward = spline.GetDirection(0);
         adjustmentTime = 0;
+        progress = startProgress;
     }
     public void move()
     {
-        progress += getProperTime();
+        progress += getProperTime(Time.deltaTime);
         
         if (progress > 1f)
         {
@@ -57,27 +59,30 @@ public class SplineWalker : MonoBehaviour
             if (lookForward)
             {
                 transform.forward = spline.GetDirection(progress + 0.002f);
+                float curvature = spline.GetCurvature(progress + 0.005f);
+                GetComponent<Animator>().SetFloat("Direction", 0.5f + curvature);
             }
         }
         
     }
 
-    private float getProperTime()
+    private float getProperTime(float delta)
     {
         float checker = 0;
         float prev = 0;
-        float dt = Time.deltaTime;
+        float deltaTime = delta;
+        float dt = delta;
         float s = GetSpeed();
-        while (Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * s) > 0.01f)
+        while (Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - deltaTime * s) > 0.01f)
         {
-            float p = Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - Time.deltaTime * s);
+            float p = Mathf.Abs((transform.position - spline.GetPoint(progress + dt)).magnitude - deltaTime * s);
             checker += Time.deltaTime;
             if (checker > 3)
             {
                 print("x");
                 break;
             }
-            if ((transform.position - spline.GetPoint(progress + dt)).magnitude > Time.deltaTime * s)
+            if ((transform.position - spline.GetPoint(progress + dt)).magnitude > deltaTime * s)
             {
                 dt = (dt + prev) / 2;
             } else

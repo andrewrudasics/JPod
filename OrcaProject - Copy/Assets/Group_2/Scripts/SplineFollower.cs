@@ -59,7 +59,6 @@ public class SplineFollower : MonoBehaviour
             }
             
         }
-        print(count);
         return result;
     }
 }
