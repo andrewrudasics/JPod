@@ -85,4 +85,4 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TargetPosition: {r: 0, g: 0, b: 0, a: 0}
-    - target: {r: -179.57394, g: -71.43399, b: -126.65127, a: 0}
+    - target: {r: -151.8938, g: -71, b: -128.11801, a: 0}

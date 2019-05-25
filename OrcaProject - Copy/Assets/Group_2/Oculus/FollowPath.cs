@@ -76,7 +76,7 @@ public class FollowPath : MonoBehaviour
 
             Vector3 move = Vector3.zero;
             // For PC imput.
-            xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            //xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             // VRCam.forward is where the player looks at.
             move += xy.y * VRCam.transform.forward;
 
