@@ -25,6 +25,10 @@ public class WaterController : MonoBehaviour
     //Get the y coordinate from whatever wavetype we are using
     public float GetWaveYPos(Vector3 position, float timeSinceStart)
     {
+        float wx = 1f;
+        float wz = 2f;
+        float frequency = 2;
+        float offset = Mathf.Sin(wx * position.x + timeSinceStart / frequency) + Mathf.Sin(wx * position.z + timeSinceStart / frequency);
         //if (isMoving)
         //{
         //return WaveTypes.SinXWave(position, speed, scale, waveDistance, noiseStrength, noiseWalk, timeSinceStart);
@@ -34,7 +38,7 @@ public class WaterController : MonoBehaviour
         //return 0f;
         //}
 
-        return transform.position.y;
+        return transform.position.y + Mathf.Sin(timeSinceStart * 1.5f) / 5;
     }
 
     //Find the distance from a vertice to water

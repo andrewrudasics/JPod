@@ -10,7 +10,7 @@ public class SplineWalker : MonoBehaviour
     public float adjustmentTime;
     public float startProgress;
     public GameObject dummy;
-    private float progress;
+    public float progress;
     private Vector3 rotationBeforeAdjustment;
 
     private void Start()
@@ -22,13 +22,18 @@ public class SplineWalker : MonoBehaviour
     }
     public void move()
     {
-        progress += getProperTime(Time.deltaTime);
-        
+        if (dummy != null)
+            dummy.transform.position = spline.GetPoint(progress + getProperTimeProgressive(2));
+
+
+        float dt = getProperTimeProgressive(Time.deltaTime);
+        progress += dt;
         if (progress > 1f)
         {
             progress = 1f;
         }
         Vector3 position = spline.GetPoint(progress);
+
         if (GetComponent<WhalePath>().StartAdjustment())
         {
             if (adjustmentTime == 0)
@@ -60,12 +65,17 @@ public class SplineWalker : MonoBehaviour
             {
                 transform.forward = spline.GetDirection(progress + 0.002f);
                 float curvature = spline.GetCurvature(progress + 0.005f);
-                GetComponent<Animator>().SetFloat("Direction", 0.5f + curvature);
+                Vector3 toDummy = dummy.transform.position - transform.position;
+                // positive - counterclockwise, negative - clockwise
+                float sign = Mathf.Sign(Vector3.Cross(transform.forward, toDummy).y);
+                float cos = Vector3.Dot(transform.forward.normalized, toDummy.normalized);
+                GetComponent<Animator>().SetFloat("Direction", 0.5f + sign * (1 - cos));
             }
         }
         
     }
 
+    // Doesn't support variable time.
     private float getProperTime(float delta)
     {
         float checker = 0;
@@ -92,6 +102,53 @@ public class SplineWalker : MonoBehaviour
             }
             
         }
+        return dt;
+    }
+
+    // Progressive algorithm. Parameter could basically be anything.
+    // Might be slightly more expensive.
+    private float getProperTimeProgressive(float time)
+    {
+        // Search step
+        float step = 0.001f;
+        // Keeps track the distance we've covered so far.
+        float length = 0;
+        // Intended speed
+        float speed = GetSpeed();
+        // The increment on progress
+        float dt = 0;
+        Vector3 current = spline.GetPoint(progress);
+        float c = 0;
+        while (speed * time - length > 0.01 && c < 1000)
+        {
+            c++;
+            Vector3 next = spline.GetPoint(progress + dt + step);
+            if (length + (next - current).magnitude > speed * time)
+            {
+                step /= 2;
+            } else
+            {
+                length += (next - current).magnitude;
+                current = next;
+                dt += step;
+            }
+        }
+        return dt;
+    }
+
+    private float getProperTimeAccumulate(float time)
+    {
+        int itrs = (int)Mathf.Round(time / Time.deltaTime);
+        itrs = 100;
+        // Save progress. Restores after calculation is done.
+        float savedProgress = progress;
+        for (int i = 0; i < itrs; i++)
+        {
+            float t = getProperTime(Time.deltaTime);
+            progress += t;
+        }
+        float dt = progress - savedProgress;
+        progress = savedProgress;
         return dt;
     }
 

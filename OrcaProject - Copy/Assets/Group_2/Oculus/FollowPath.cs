@@ -76,7 +76,7 @@ public class FollowPath : MonoBehaviour
 
             Vector3 move = Vector3.zero;
             // For PC imput.
-            //xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            xy += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             // VRCam.forward is where the player looks at.
             move += xy.y * VRCam.transform.forward;
 
@@ -87,13 +87,16 @@ public class FollowPath : MonoBehaviour
             // then let the player moving in a inclided plane.
             if (target == 6)
             {
-                move.x = 0;
-                move.z = 0;
-                if (transform.position.y < -34)
-                    move = move.normalized;
+                Vector3 dest = whale.transform.position + new Vector3((startPoint - whale.transform.position).x, 0,
+                                                                       (startPoint - whale.transform.position).z).normalized * 5;
+                Vector3 startToTarget = dest - startPoint;
+
+                if (transform.position.y < -31) {
+                    move = (startToTarget.normalized + new Vector3(0, 3, 0)).normalized * xy.y;
+                }
                 else
                 {
-                    move.y = 0;
+                    move = Vector3.zero;
                 }
             }
             else if (target > 3)
@@ -150,7 +153,7 @@ public class FollowPath : MonoBehaviour
         }
         else if (target == waypoints.Count - 1)
         {
-            target--;
+            //target--;
         }
     }
     /*

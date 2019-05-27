@@ -16,6 +16,8 @@ public class WhalePath : MonoBehaviour
     public float triggerDistance, playerTrigger, celebrationTime;
     public BezierSpline curve;
     public AudioSource wsrc;
+    public GameObject calf;
+    public GameObject boat;
 
 
     public int current, target;
@@ -90,6 +92,11 @@ public class WhalePath : MonoBehaviour
                         prev = reached;
                         StartCoroutine(adjustRotation(2f));
                         CheckBorderUpdates();
+
+                        if (target == 4)
+                        {
+                            boat.GetComponent<BoatEngine>().startEngine();
+                        }
                     }
 
                     if (playerReached && playerReached != prevR)
@@ -113,6 +120,13 @@ public class WhalePath : MonoBehaviour
                     {
 
                     }
+                } else
+                {
+                    if (reached != prev)
+                    {
+                        prev = reached;
+                        CheckBorderUpdates();
+                    }
                 }
             }
             else
@@ -127,6 +141,7 @@ public class WhalePath : MonoBehaviour
                 if (target < 7)
                 {
                     GetComponent<SplineWalker>().move();
+                    //calf.GetComponent<Calf_SplineWalker>().move();
                 }
             }
 
@@ -154,7 +169,7 @@ public class WhalePath : MonoBehaviour
         startAdjustment = true;
         arrivalAdjustmentDone = false;
 
-        if (target < 7 - 1)
+        if (target < 6)
         {
             anim.SetBool("Swim", true);
             target++;

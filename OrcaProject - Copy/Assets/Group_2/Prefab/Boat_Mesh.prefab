@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 4337077249388090682}
   - component: {fileID: 4337077249388090687}
   - component: {fileID: 4337077249388090684}
-  - component: {fileID: 4337077249388090686}
   m_Layer: 0
   m_Name: Boat_Mesh
   m_TagString: Untagged
@@ -157,20 +156,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: d7faa63b2effdda45a4fbf4bf8137f55, type: 3}
---- !u!114 &4337077249388090686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4337077249388090683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b493de62b8b59734ba00f32009bbda91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  engine: {fileID: 4337077250657175573}
-  force: 5
 --- !u!1 &4337077249642115498
 GameObject:
   m_ObjectHideFlags: 0
