@@ -34,6 +34,7 @@ public class SplineWalker : MonoBehaviour
 
 
         float dt = getProperTimeProgressive(Time.deltaTime);
+        print(dt);
         progress += dt;
         if (progress > 1f)
         {
@@ -118,7 +119,6 @@ public class SplineWalker : MonoBehaviour
                 dt += step;
             }
         }
-        print("speed" + speed);
         return dt;
     }
 

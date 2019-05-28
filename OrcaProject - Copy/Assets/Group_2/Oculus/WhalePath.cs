@@ -142,7 +142,6 @@ public class WhalePath : MonoBehaviour
                 {
                     GetComponent<SplineWalker>().whaleDeparts();
                     GetComponent<SplineWalker>().move();
-                    //calf.GetComponent<Calf_SplineWalker>().move();
                 }
             }
 

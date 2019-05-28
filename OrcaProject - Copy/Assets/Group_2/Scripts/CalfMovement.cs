@@ -35,7 +35,6 @@ public class CalfMovement : MonoBehaviour
     public Vector3 getPositionOnSpline()
     {
         float dt = parent.GetComponent<SplineWalker>().getProperTimeProgressive(-1);
-        print(dt);
         return spline.GetPoint(parent.GetComponent<SplineWalker>().progress + dt);
         
     }
