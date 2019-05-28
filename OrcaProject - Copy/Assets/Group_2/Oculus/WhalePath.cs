@@ -90,8 +90,8 @@ public class WhalePath : MonoBehaviour
                         anim.SetBool("Follow", true);
                         anim.SetBool("Swim", false);
                         prev = reached;
-                        StartCoroutine(adjustRotation(2f));
-                        CheckBorderUpdates();
+                        //StartCoroutine(adjustRotation(2f));
+                        CheckBorderUpdates();    
 
                         if (target == 4)
                         {
@@ -110,10 +110,10 @@ public class WhalePath : MonoBehaviour
                     else if (!playerReached)
                     {
                         prevR = false;
-                        if (arrivalAdjustmentDone)
-                        {
-                            transform.LookAt(player);
-                        }
+                        // Tells SplineWalker to stop controlling whale's orientation.
+                        GetComponent<SplineWalker>().whaleReached();
+                        Vector3 target = player.transform.position - transform.position;
+                        transform.forward = Vector3.RotateTowards(transform.forward, target, 0.5f * Time.deltaTime, 0);
 
                     }
                     if (Time.time - celebrationStart > celebrationTime && celebrating)
@@ -140,6 +140,7 @@ public class WhalePath : MonoBehaviour
             {
                 if (target < 7)
                 {
+                    GetComponent<SplineWalker>().whaleDeparts();
                     GetComponent<SplineWalker>().move();
                     //calf.GetComponent<Calf_SplineWalker>().move();
                 }
@@ -183,6 +184,11 @@ public class WhalePath : MonoBehaviour
         //anim.SetInteger("Target", target);
         anim.SetBool("Follow", false);
         player.GetComponent<FollowPath>().updateTarget();
+
+        // Let the whale accelerate from 0
+        // Don't set speed to zero once the whale reaches the spot
+        // The calf needs the speed to update position.
+        GetComponent<SplineWalker>().undampedSpeed = 0;
     }
 
     public bool hasReached()
@@ -195,6 +201,7 @@ public class WhalePath : MonoBehaviour
         if (anim.GetBool("Start"))
         {
             start = true;
+            anim.SetBool("Swim", true);
         }
         
     }
@@ -206,7 +213,11 @@ public class WhalePath : MonoBehaviour
     }
     public bool StartAdjustment()
     {
-        return startAdjustment;
+        // Return false to supresse adjustment
+        return false;
+
+        // currently not used.
+        //return startAdjustment;
     }
 
     public void AdjustmentDone()
