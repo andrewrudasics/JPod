@@ -50,21 +50,7 @@ public class WhalePath : MonoBehaviour
         if (start)
         {
             end = target == 6 && atTarget();
-            if (target < 6)
-            {   
-                // to stop turning, replace true with flag
-                if (flag)
-                {
-                    //var targetRotation = Quaternion.LookRotation(lookTarget.transform.position - transform.position);
-                    //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
-                }
-            }
-            else
-            {
-                triggerDistance = 0.05f;
-                var targetRotation = Quaternion.LookRotation(new Vector3(player.position.x, 0, player.position.z) - new Vector3(transform.position.x, 0, transform.position.z));
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
-            }
+            
             
 
             if (target > 3)
@@ -138,11 +124,8 @@ public class WhalePath : MonoBehaviour
 
             if (anim.GetBool("Swim"))
             {
-                if (target < 7)
-                {
-                    GetComponent<SplineWalker>().whaleDeparts();
-                    GetComponent<SplineWalker>().move();
-                }
+                GetComponent<SplineWalker>().whaleDeparts();
+                GetComponent<SplineWalker>().move();
             }
 
             if (end)

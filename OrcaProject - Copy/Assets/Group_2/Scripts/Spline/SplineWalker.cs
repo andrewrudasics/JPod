@@ -30,10 +30,10 @@ public class SplineWalker : MonoBehaviour
         UpdateSpeed();
 
         if (dummy != null)
-            dummy.transform.position = spline.GetPoint(progress + getProperTimeProgressive(1.25f));
+            dummy.transform.position = spline.GetPoint(progress + getProperTimeProgressive(1.25f, false));
 
 
-        float dt = getProperTimeProgressive(Time.deltaTime);
+        float dt = getProperTimeProgressive(Time.deltaTime, true);
         print(dt);
         progress += dt;
         if (progress > 1f)
@@ -42,54 +42,26 @@ public class SplineWalker : MonoBehaviour
         }
         Vector3 position = spline.GetPoint(progress);
 
-        if (GetComponent<WhalePath>().StartAdjustment())
+        GetComponent<Rigidbody>().MovePosition(position);
+        if (lookForward)
         {
-            if (adjustmentTime == 0)
-            {
-                rotationBeforeAdjustment = transform.forward;
-            }
-            adjustmentTime += Time.deltaTime;
-            Vector3 adjustedPosition = Vector3.Lerp(transform.position + transform.forward.normalized  * Time.deltaTime,
-                                                    position, 
-                                                    Mathf.Pow(adjustmentTime / 2, 3));
-            if (adjustmentTime >= 2)
-            {
-                GetComponent<WhalePath>().AdjustmentDone();
-                adjustmentTime = 0;
-            }
-            GetComponent<Rigidbody>().MovePosition(adjustedPosition);
-
-            if (lookForward)
-            {
-                Vector3 adjustedRotation = Vector3.Lerp(rotationBeforeAdjustment, spline.GetDirection(progress + 0.002f), adjustmentTime / 2);
-               
-                transform.forward = adjustedRotation;
-            }
-
-        } else
-        {
-            GetComponent<Rigidbody>().MovePosition(position);
-            if (lookForward)
-            {
-                float angularSpeed = 3 * speed / maxSpeed;
-                transform.forward = Vector3.RotateTowards(transform.forward, spline.GetDirection(progress), angularSpeed * Time.deltaTime, 0);
-                Vector3 toDummy = dummy.transform.position - transform.position;
-                // positive - counterclockwise, negative - clockwise
-                float sign = Mathf.Sign(Vector3.Cross(transform.forward, toDummy).y);
-                float cos = Vector3.Dot(transform.forward.normalized, toDummy.normalized);
-                float prev = GetComponent<Animator>().GetFloat("Direction");
-                float next = 0.5f + sign * (1 - cos);
-                float v = prev + Mathf.Sign(next - prev) * Mathf.Min(Mathf.Abs(next - prev), 0.5f * Time.deltaTime); 
-                GetComponent<Animator>().SetFloat("Direction", v);
-            }
+            float angularSpeed = 3 * speed / maxSpeed;
+            transform.forward = Vector3.RotateTowards(transform.forward, spline.GetDirection(progress), angularSpeed * Time.deltaTime, 0);
+            Vector3 toDummy = dummy.transform.position - transform.position;
+            // positive - counterclockwise, negative - clockwise
+            float sign = Mathf.Sign(Vector3.Cross(transform.forward, toDummy).y);
+            float cos = Vector3.Dot(transform.forward.normalized, toDummy.normalized);
+            float prev = GetComponent<Animator>().GetFloat("Direction");
+            float next = 0.5f + 1.2f * sign * (1 - cos);
+            float v = prev + Mathf.Sign(next - prev) * Mathf.Min(Mathf.Abs(next - prev), 0.5f * Time.deltaTime);
+            GetComponent<Animator>().SetFloat("Direction", Mathf.Clamp01(v));
         }
-        
     }
 
     
     // Progressive algorithm. Parameter could basically be anything.
     // Might be slightly more expensive.
-    public float getProperTimeProgressive(float time)
+    public float getProperTimeProgressive(float time, bool damped)
     {
         // Search step
         float step = 0.001f * Mathf.Sign(time);
@@ -98,6 +70,14 @@ public class SplineWalker : MonoBehaviour
         // The increment on progress
         float dt = 0;
         Vector3 current = spline.GetPoint(progress);
+        float speed;
+        if (damped)
+        {
+            speed = this.speed;
+        } else
+        {
+            speed = maxSpeed * 0.75f;
+        }
         float c = 0;
         while (speed * Mathf.Abs(time) - length > 0.01 && c < 1000)
         {
