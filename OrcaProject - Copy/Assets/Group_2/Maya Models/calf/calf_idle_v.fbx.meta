@@ -17,7 +17,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: luna_eye_texture
-    second: {fileID: -1476442521847317836, guid: ec95093d6d7ea104e9a9170cb558b633,
+    second: {fileID: 3905352683833195752, guid: 8444d8493895a5848accbe6d9c40d606,
       type: 3}
   - first:
       type: UnityEngine:Material
@@ -116,7 +116,7 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 0
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0

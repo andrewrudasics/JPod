@@ -10,7 +10,7 @@ Material:
   m_Name: SeaWeed 08 Mat
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ShaderKeywords: _EMISSION _ENVIRONMENTREFLECTIONS_OFF _NORMALMAP _SPECULAR_SETUP
-  m_LightmapFlags: 1
+  m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3050
@@ -106,7 +106,7 @@ Material:
     - _SpecularHighlights: 1
     - _SquashAmount: 1
     - _SrcBlend: 5
-    - _Surface: 1
+    - _Surface: 0
     - _TranslucencyViewDependency: 0.7
     - _UVSec: 0
     - _WorkflowMode: 0
