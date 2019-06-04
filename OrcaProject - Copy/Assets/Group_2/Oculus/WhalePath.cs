@@ -51,7 +51,7 @@ public class WhalePath : MonoBehaviour
     {
         if (start)
         {
-            end = target == 6 && atTarget();
+            //end = target == 6 && atTarget();
             
             
 
@@ -134,7 +134,7 @@ public class WhalePath : MonoBehaviour
                 GetComponent<SplineWalker>().move();
             }
 
-            if (end)
+            if (target == 6 && atTarget())
             {
                 moveToNext();
             }
@@ -167,6 +167,7 @@ public class WhalePath : MonoBehaviour
         {
             anim.SetBool("Swim", false);
             anim.SetBool("DoSpyHopping", true);
+            print("end:" + end);
             UpdateUIArrive();
             end = true;
         }

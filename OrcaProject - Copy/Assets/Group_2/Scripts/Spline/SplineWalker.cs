@@ -53,7 +53,6 @@ public class SplineWalker : MonoBehaviour
             float prev = GetComponent<Animator>().GetFloat("Direction");
             float next = 0.5f + 1.2f * sign * (1 - cos);
             float v = prev + Mathf.Sign(next - prev) * Mathf.Min(Mathf.Abs(next - prev), 0.5f * Time.deltaTime);
-            print(v);
             GetComponent<Animator>().SetFloat("Direction", Mathf.Clamp01(v));
         }
     }

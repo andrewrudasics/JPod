@@ -159,7 +159,7 @@ namespace VRStandardAssets.Utils
         private void HandleDown ()
         {
             // If the user is looking at the bar start the FillBar coroutine and store a reference to it.
-            if (m_GazeOver)
+            if (m_GazeOver && GetComponent<CanvasGroup>().alpha == 1)
                 m_FillBarRoutine = StartCoroutine(FillBar());
         }
 

@@ -63,10 +63,10 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.1
+    globalScale: 10
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -112,8 +112,8 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.001
-    rootMotionBoneName: 
+    globalScale: 0.099999994
+    rootMotionBoneName: granny:Granny_root_bind_joint
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1

@@ -46,7 +46,7 @@ public class AmbientAudioManager : MonoBehaviour {
                 pod.SetActive(true);
                 podStart = Time.time;
             }
-
+            StartCoroutine(endGame(10));
             masterUI.SetActive(false);            
         }
 
@@ -106,13 +106,14 @@ public class AmbientAudioManager : MonoBehaviour {
 
     IEnumerator endGame(float delay)
     {
+        post.isGlobal = true;
         yield return new WaitForSeconds(delay);
-
         ColorGrading colorGradingLayer = null;
         post.profile.TryGetSettings(out colorGradingLayer);
+        
         while (colorGradingLayer.postExposure < 30)
         {
-            colorGradingLayer.postExposure.Override(colorGradingLayer.postExposure.value + Time.deltaTime * 8);
+            colorGradingLayer.postExposure.Override(colorGradingLayer.postExposure.value + Time.deltaTime * 2);
             yield return new WaitForEndOfFrame();
         }
     }

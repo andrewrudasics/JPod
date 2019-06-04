@@ -3052,7 +3052,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: 
+    rootMotionBoneName: granny:Granny_root_bind_joint
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
