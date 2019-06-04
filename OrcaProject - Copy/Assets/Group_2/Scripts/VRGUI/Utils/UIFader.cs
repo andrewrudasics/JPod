@@ -19,7 +19,6 @@ namespace VRStandardAssets.Utils
 
         private bool m_Fading = true;                                  // Whether the UI elements are currently fading in or out.
 
-
         public bool Visible { get; private set; }               // Whether the UI elements are currently visible.
 
 
@@ -70,6 +69,10 @@ namespace VRStandardAssets.Utils
                 // Go through all the groups...
                 for (int i = 0; i < m_GroupsToFade.Length; i++)
                 {
+                    if (!m_GroupsToFade[i].gameObject.active)
+                    {
+                        m_GroupsToFade[i].gameObject.SetActive(true);
+                    }
                     // ... and increment their alpha based on the fade speed.
                     m_GroupsToFade[i].alpha += m_FadeSpeed * Time.deltaTime;
 
@@ -174,5 +177,19 @@ namespace VRStandardAssets.Utils
 
             Visible = false;
         }
+
+        public void startFadeOut(CanvasGroup[] group)
+        {
+            m_GroupsToFade = group;
+            StartCoroutine(FadeOut());
+        }
+
+        public void startFadeIn(CanvasGroup[] group)
+        {
+            m_GroupsToFade = group;
+            StartCoroutine(FadeIn());
+        }
+
+
     }
 }

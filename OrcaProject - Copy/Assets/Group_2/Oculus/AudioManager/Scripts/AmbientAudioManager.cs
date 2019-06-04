@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class AmbientAudioManager : MonoBehaviour {
 
@@ -15,7 +16,8 @@ public class AmbientAudioManager : MonoBehaviour {
     public GameObject pod;
     public FadeControl fade;
     public float playDuration;
-
+    public GameObject masterUI;
+    public PostProcessVolume post;
 
     private int nextClip;
     private bool prevState;
@@ -44,7 +46,8 @@ public class AmbientAudioManager : MonoBehaviour {
                 pod.SetActive(true);
                 podStart = Time.time;
             }
-            
+
+            masterUI.SetActive(false);            
         }
 
         if (pod.active) {
@@ -99,5 +102,18 @@ public class AmbientAudioManager : MonoBehaviour {
     bool IsAboveWater()
     {
         return player.position.y > oceanHeight;
+    }
+
+    IEnumerator endGame(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        ColorGrading colorGradingLayer = null;
+        post.profile.TryGetSettings(out colorGradingLayer);
+        while (colorGradingLayer.postExposure < 30)
+        {
+            colorGradingLayer.postExposure.Override(colorGradingLayer.postExposure.value + Time.deltaTime * 8);
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

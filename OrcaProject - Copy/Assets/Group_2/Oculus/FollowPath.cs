@@ -92,7 +92,12 @@ public class FollowPath : MonoBehaviour
                 Vector3 startToTarget = dest - startPoint;
 
                 if (transform.position.y < -31) {
-                    move = (startToTarget.normalized + new Vector3(0, 3, 0)).normalized * xy.y;
+                    /*
+                    Vector3 forwardOnXZ = Vector3.ProjectOnPlane(VRCam.transform.forward, new Vector3(0, 1, 0));
+                    float ratio = Vector3.Dot(forwardOnXZ.normalized, VRCam.transform.forward.normalized);
+                    ratio = ratio * 1 / 0.7f;
+                    */
+                    move = (startToTarget.normalized + new Vector3(0, 3, 0)).normalized * Mathf.Clamp01(xy.y);
                 }
                 else
                 {

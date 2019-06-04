@@ -18,6 +18,8 @@ public class WhalePath : MonoBehaviour
     public AudioSource wsrc;
     public GameObject calf;
     public GameObject boat;
+    public AudioClip[] clips;
+    public GameObject masterUI;
 
 
     public int current, target;
@@ -83,6 +85,8 @@ public class WhalePath : MonoBehaviour
                         {
                             boat.GetComponent<BoatEngine>().startEngine();
                         }
+
+                        UpdateUIArrive();
                     }
 
                     if (playerReached && playerReached != prevR)
@@ -91,7 +95,9 @@ public class WhalePath : MonoBehaviour
                         anim.SetBool("Celebrating", true);
                         celebrationStart = Time.time;
                         prevR = playerReached;
-                        wsrc.Play();
+                        wsrc.PlayOneShot(clips[Random.Range(0, clips.Length)], 1);
+
+                        UpdateUIDepart();
                     }
                     else if (!playerReached)
                     {
@@ -131,7 +137,6 @@ public class WhalePath : MonoBehaviour
             if (end)
             {
                 moveToNext();
-                end = false;
             }
         }
     }
@@ -162,6 +167,8 @@ public class WhalePath : MonoBehaviour
         {
             anim.SetBool("Swim", false);
             anim.SetBool("DoSpyHopping", true);
+            UpdateUIArrive();
+            end = true;
         }
         //anim.SetInteger("Target", target);
         anim.SetBool("Follow", false);
@@ -225,5 +232,21 @@ public class WhalePath : MonoBehaviour
     private void CheckBorderUpdates()
     {
         GetComponent<BorderManager>().UpdateBorder();
+    }
+
+    private void UpdateUIDepart()
+    {
+        if (!end && (target == 1 || target == 2 || target == 6))
+        {
+            masterUI.GetComponent<VRStandardAssets.Utils.FadeManager>().fadeOut();
+        }
+    }
+
+    private void UpdateUIArrive()
+    {
+        if (!end && (target == 1 || target == 2 || target == 6))
+        {
+            masterUI.GetComponent<VRStandardAssets.Utils.FadeManager>().fadeIn();
+        }
     }
 }

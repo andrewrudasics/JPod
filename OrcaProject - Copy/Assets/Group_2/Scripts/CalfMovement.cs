@@ -69,7 +69,6 @@ public class CalfMovement : MonoBehaviour
         float prev = GetComponent<Animator>().GetFloat("Direction");
         float next = 0.5f + sign * (1 - cos);
         float v = prev + Mathf.Sign(next - prev) * Mathf.Min(Mathf.Abs(next - prev), 0.5f * Time.deltaTime);
-        print(v);
         anim.SetFloat("Direction", v);
     }
 

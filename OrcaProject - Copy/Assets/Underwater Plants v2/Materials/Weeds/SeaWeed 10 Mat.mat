@@ -21,19 +21,27 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SeaWeed 10 Mat
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 02d7ecb73b45df446b31e56fa6ae4fc3,
+    type: 3}
   m_ShaderKeywords: _EMISSION _ENVIRONMENTREFLECTIONS_OFF _NORMALMAP _SPECULAR_SETUP
-  m_LightmapFlags: 1
+  m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3050
-  stringTagMap:
-    RenderType: Transparent
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses:
   - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_D482DC5B:
+        m_Texture: {fileID: 2800000, guid: 0457363fb9961bb4e9318f48dff86623, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_E8E621E2:
+        m_Texture: {fileID: 2800000, guid: c47f15f459cd2b84db545d8b4df14b64, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: c47f15f459cd2b84db545d8b4df14b64, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -91,6 +99,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_6AC71F62: 2
+    - Vector1_708ADF21: 0.2
+    - Vector1_E60C4020: 0.05
     - _AO: 0
     - _AlphaClip: 0
     - _BaseLight: 1
